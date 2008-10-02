@@ -1,7 +1,7 @@
-from django.template.loader import render_to_string
-from debug_toolbar.panels import DebugPanel
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.views.debug import get_safe_settings
+from debug_toolbar.panels import DebugPanel
 
 class SettingsVarsDebugPanel(DebugPanel):
     """
@@ -11,15 +11,13 @@ class SettingsVarsDebugPanel(DebugPanel):
     has_content = True
 
     def title(self):
-        return 'Settings Vars'
+        return 'Settings'
 
     def url(self):
         return ''
 
     def content(self):
-        import logging
-        settings_dict = get_safe_settings()
         context = {
-            'settings': settings_dict,
+            'settings': get_safe_settings(),
         }
         return render_to_string('debug_toolbar/panels/settings_vars.html', context)

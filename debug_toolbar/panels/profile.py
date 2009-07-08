@@ -14,6 +14,8 @@ class ProfileDebugPanel(DebugPanel):
     
     def __init__(self):
         self.profiler = None
+        self.view_func = None
+        self.content = None
         
     def title(self):
         return 'Profile'
@@ -22,14 +24,20 @@ class ProfileDebugPanel(DebugPanel):
         return ''
         
     def process_view(self, request, view_func, view_args, view_kwargs):
-        logging.debug("Processing view")
+        logging.debug('Processing view')
         if request.REQUEST.has_key('prof'):
-            logging.debug("Profiler key found in request")
+            self.view_func = view_func
+            logging.debug('Profiler key found in request')
             self.profiler = profile.Profile()
-            return self.profiler.runcall(view_func, request, *view_args, **view_kwargs)
+            self.profiler.runcall(view_func, request, *view_args, **view_kwargs)
+            
+    def process_response(self, request, response):
+        logging.debug('Processing response')
+        if request.REQUEST.has_key('prof') and self.view_func is None:
+            logging.debug('Profiler disabled - No view function to profile')
+            self.content = '<p>This view cannot be profiled.</p>'
             
     def content(self):
-        content = None
         if self.profiler is not None:
             out = StringIO()
             old_stdout, sys.stdout = sys.stdout, out
@@ -42,8 +50,8 @@ class ProfileDebugPanel(DebugPanel):
             stats.print_stats(.1)
         
             sys.stdout = old_stdout
-            content = '<pre>%s</pre>' % out.getvalue()
-        return render_to_string('debug_toolbar/panels/profile.html', {'content':content})
+            self.content = '<pre>%s</pre>' % out.getvalue()
+        return render_to_string('debug_toolbar/panels/profile.html', {'content': self.content})
         
         
     

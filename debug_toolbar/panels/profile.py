@@ -15,7 +15,7 @@ class ProfileDebugPanel(DebugPanel):
     def __init__(self):
         self.profiler = None
         self.view_func = None
-        self.content = None
+        self.output = None
         
     def title(self):
         return 'Profile'
@@ -35,7 +35,7 @@ class ProfileDebugPanel(DebugPanel):
         logging.debug('Processing response')
         if request.REQUEST.has_key('prof') and self.view_func is None:
             logging.debug('Profiler disabled - No view function to profile')
-            self.content = '<p>This view cannot be profiled.</p>'
+            self.output = '<p>This view cannot be profiled.</p>'
             
     def content(self):
         if self.profiler is not None:
@@ -50,8 +50,8 @@ class ProfileDebugPanel(DebugPanel):
             stats.print_stats(.1)
         
             sys.stdout = old_stdout
-            self.content = '<pre>%s</pre>' % out.getvalue()
-        return render_to_string('debug_toolbar/panels/profile.html', {'content': self.content})
+            self.output = '<pre>%s</pre>' % out.getvalue()
+        return render_to_string('debug_toolbar/panels/profile.html', {'content': self.output})
         
         
     

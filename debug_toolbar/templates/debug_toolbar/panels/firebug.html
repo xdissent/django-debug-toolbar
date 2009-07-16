@@ -1,0 +1,35 @@
+<script type="text/javascript" charset="utf-8">   
+(function($) {
+
+    $(function() {
+        var firebug_url = 'http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js';
+        var $firebug_link = $('a.djDebugFirebugPanel').unbind('click');
+        
+        if (window.console && window.console.firebug) {
+            $firebug_link
+                .click(function() {
+                        return false;
+                    });
+        } else {
+            $firebug_link
+                .one('click', function() {
+                        $.getScript(firebug_url, function() {
+                                firebug.init();
+                                firebug.env.showIconWhenHidden = false;
+                                $firebug_link
+                                    .click(function() {
+                                            if (firebug.el.main.environment.getStyle('display') == 'none') {
+                                                firebug.win.show();
+                                            } else {
+                                                firebug.win.hide();
+                                            }
+                                            return false;
+                                        });
+                            });
+                        return false;
+                    });
+        }
+    });
+
+})(jQuery);
+</script>

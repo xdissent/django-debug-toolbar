@@ -1,0 +1,27 @@
+<h3>Validator</h3>
+
+{% if errors %}
+    <table>
+    	<thead>
+    		<tr>
+    			<th>Errors</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    		{% for error in errors %}
+    			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+    				<td>
+    				    Line <a href="#validator-{{ error.line }}">{{ error.line }}</a>:
+                        {{ error.message|escape }}
+                    </td>
+    			</tr>
+    		{% endfor %}
+    	</tbody>
+    </table>
+    
+    {{ source }}
+
+{% else %}
+    <p>This page contains valid markup.</p>
+    
+{% endif %}

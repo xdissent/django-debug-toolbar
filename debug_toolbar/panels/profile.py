@@ -24,15 +24,13 @@ class ProfileDebugPanel(DebugPanel):
         return ''
         
     def process_view(self, request, view_func, view_args, view_kwargs):
-        logging.debug('Processing view')
         if request.REQUEST.has_key('prof'):
+            logging.debug('Profiling view')
             self.view_func = view_func
-            logging.debug('Profiler key found in request')
             self.profiler = profile.Profile()
-            self.profiler.runcall(view_func, request, *view_args, **view_kwargs)
+            return self.profiler.runcall(view_func, request, *view_args, **view_kwargs)
             
     def process_response(self, request, response):
-        logging.debug('Processing response')
         if request.REQUEST.has_key('prof') and self.view_func is None:
             logging.debug('Profiler disabled - No view function to profile')
             self.output = '<p>This view cannot be profiled.</p>'
@@ -52,7 +50,3 @@ class ProfileDebugPanel(DebugPanel):
             sys.stdout = old_stdout
             self.output = '<pre>%s</pre>' % out.getvalue()
         return render_to_string('debug_toolbar/panels/profile.html', {'content': self.output})
-        
-        
-    
-        

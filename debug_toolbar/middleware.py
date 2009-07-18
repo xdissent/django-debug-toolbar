@@ -71,8 +71,11 @@ class DebugToolbarMiddleware(object):
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         if self.debug_toolbar:
+            response = None
             for panel in self.debug_toolbar.panels:
-                panel.process_view(request, view_func, view_args, view_kwargs)
+                response = panel.process_view(request, view_func, view_args, view_kwargs)
+            if response is not None:
+                return response
 
     def process_response(self, request, response):
         if not self.debug_toolbar:

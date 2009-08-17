@@ -39,6 +39,10 @@ jQuery(function($j) {
 				$j.djDebug.toggle_content($j(this).parent().next());
 				return false;
 			});
+			$j('#djDebugTemplatePanel a.djTemplateEdit').click(function() {
+				$j.get($j(this).attr('href'));
+				return false;
+			});
 			$j('#djDebugSQLPanel a.djSQLShowStacktrace').click(function() {
 				$j.djDebug.toggle_content($j(this).parent().next());
 				return false;

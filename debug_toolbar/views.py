@@ -5,10 +5,11 @@ views in any other way is generally not advised.
 """
 
 import os
+import subprocess
 import django.views.static
 from django.conf import settings
 from django.db import connection
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
@@ -154,3 +155,21 @@ def template_source(request):
         'source': source,
         'template_name': template_name
     })
+
+def template_edit(request):
+    """Launch an editor and open the template file."""
+    from django.template.loader import find_template_source
+    
+    if not hasattr(settings, 'DEBUG_TOOLBAR_CONFIG') or \
+       'EDITOR' not in settings.DEBUG_TOOLBAR_CONFIG:
+        return HttpResponseBadRequest('No editor provided.')
+
+    template_name = request.GET.get('template', None)
+    if template_name is None:
+        return HttpResponseBadRequest('"template" key is required')
+
+    source, origin = find_template_source(template_name)
+    cmd = ' '.join([settings.DEBUG_TOOLBAR_CONFIG['EDITOR'], origin.name])
+    subprocess.call(cmd, shell=True)
+    
+    return HttpResponse('')

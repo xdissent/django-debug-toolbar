@@ -78,9 +78,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	    'debug_toolbar.panels.signals.SignalDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
-        'debug_toolbar.panels.firebug.FirebugPanel',
-        'debug_toolbar.panels.validator.ValidatorPanel',
-        'debug_toolbar.panels.profile.ProfileDebugPanel',
+	    'debug_toolbar.panels.firebug.FirebugPanel',
+	    'debug_toolbar.panels.validator.ValidatorPanel',
+	    'debug_toolbar.panels.profile.ProfileDebugPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the

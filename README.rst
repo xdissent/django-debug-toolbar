@@ -13,10 +13,13 @@ Currently, the following panels have been written and are working:
 - A list of settings in settings.py
 - Common HTTP headers
 - GET/POST/cookie/session variable display
-- Templates and context used, and their template paths
+- Templates and context used, and their template paths, with a link to edit
 - SQL queries including time to execute and links to EXPLAIN each query
 - List of signals, their args and receivers
 - Logging output via Python's built-in logging module
+- Firebug injection
+- HTML Validation
+- View profiling
 
 If you have ideas for other panels please let us know.
 
@@ -75,6 +78,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	    'debug_toolbar.panels.signals.SignalDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar.panels.firebug.FirebugPanel',
+        'debug_toolbar.panels.validator.ValidatorPanel',
+        'debug_toolbar.panels.profile.ProfileDebugPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the
@@ -101,6 +107,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `EXTRA_SIGNALS`: An array of custom signals that might be in your project,
      defined as the python path to the signal.
 
+   * `EDITOR`: The command to use when launching an editor from the Templates
+     panel.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
@@ -110,6 +119,7 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'INTERCEPT_REDIRECTS': False,
 	    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
+	    'EDITOR': 'open -a /Applications/Coda.app'
 	}
 
 TODOs and BUGS
